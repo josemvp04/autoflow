@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AUTOFLOW – Demo interactivo</title>
+<style>
+:root{--bg:#F4F6F9;--card:#fff;--ink:#0E1A2B;--mute:#4A5B73;--line:#D5DCE6;--acc:#FF9F1C;--navy:#0E1A2B;--red:#C62828;--amb:#F2A900;--grn:#2E9E4F;--ambt:#8A5A00;--grnt:#1B5E2B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1320;--card:#14202F;--ink:#EAF0F7;--mute:#9FB0C5;--line:#2A3B52;--navy:#EAF0F7;--ambt:#F2C14E;--grnt:#6CCB8A}}
+:root[data-theme="dark"]{--bg:#0B1320;--card:#14202F;--ink:#EAF0F7;--mute:#9FB0C5;--line:#2A3B52;--navy:#EAF0F7;--ambt:#F2C14E;--grnt:#6CCB8A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0}
+h2{font-size:18px;margin:0 0 10px}
+.sub{color:var(--mute);margin:4px 0 16px;font-size:14px}
+.brand span{color:var(--acc)}
+.steps{display:flex;gap:6px;margin:14px 0}
+.step{flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 4px;border-radius:8px;background:var(--card);color:var(--mute);border:1px solid var(--line)}
+.step.on{background:var(--acc);color:#0E1A2B;border-color:var(--acc)}
+.step.ok{color:var(--grnt);border-color:var(--grn)}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;min-height:44px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;border-radius:10px;font-size:14px;cursor:pointer}
+.tab.sel{border-color:var(--acc);background:var(--acc);color:#0E1A2B}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 4px}
+select,textarea,input[type=file]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:44px}
+textarea{min-height:84px;resize:vertical}
+.btn{min-height:44px;padding:10px 18px;border-radius:8px;border:2px solid var(--navy);background:var(--navy);color:var(--bg);font:inherit;font-weight:700;cursor:pointer}
+.btn.acc{background:var(--acc);border-color:var(--acc);color:#0E1A2B}
+.btn.ghost{background:transparent;color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.row .btn{flex:1 1 120px}
+.empty{color:var(--mute);text-align:center;padding:22px 8px}
+.media{width:100%;height:170px;border-radius:10px;background:var(--bg);border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:13px;overflow:hidden;margin:8px 0}
+.media img,.media video{width:100%;height:100%;object-fit:cover}
+.badge{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:13px;padding:4px 10px;border-radius:20px;border:1px solid var(--line)}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.d-alta{background:var(--red)}.d-media{background:var(--amb)}.d-baja{background:var(--grn)}
+.prio{display:flex;gap:8px;flex-wrap:wrap}
+.prio label{flex:1 1 150px;margin:0;border:2px solid var(--line);border-radius:10px;padding:10px;display:flex;gap:8px;align-items:center;cursor:pointer;min-height:44px}
+.prio input{accent-color:var(--acc)}
+.phone{max-width:380px;margin:0 auto;border:3px solid var(--navy);border-radius:26px;padding:16px;background:var(--bg)}
+.kv{font-size:14px;color:var(--mute)}
+.kv b{color:var(--ink)}
+.log{list-style:none;margin:0;padding:0;font-size:14px}
+.log li{padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:10px}
+.log time{color:var(--mute);min-width:64px}
+.res{border-radius:10px;padding:12px;font-weight:700;margin-top:10px}
+.res.ap{background:rgba(46,158,79,.18);color:var(--grnt)}
+.res.pr{background:rgba(242,169,0,.2);color:var(--ambt)}
+.res.re{background:rgba(198,40,40,.15);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p style="margin:0 0 8px"><a href="index.html" style="color:var(--mute);font-size:14px">← Volver al inicio</a></p><h1 class="brand">AUTO<span>FLOW</span> · Demo</h1>
+<p class="sub">Simula cómo un hallazgo pasa del técnico al jefe de taller y llega al cliente para su aprobación. Los datos del vehículo son de ejemplo.</p>
+<div class="card" style="padding:12px 16px"><div class="kv"><b>Toyota Hilux 2018</b> · Placa 0000-XXX · Cliente: [Nombre de ejemplo] · Servicio: mantenimiento de 40.000 km</div></div>
+<div id="steps" class="steps"></div>
+<div id="tabs" class="tabs"></div>
+<div id="panel"></div>
+<div class="card"><h2>Registro de actividad</h2><ul id="log" class="log"></ul>
+<div class="row"><button class="btn ghost" id="reset">Reiniciar demo</button></div></div>
+</div>
+<script>
+var S={stage:0,role:0,f:null,decision:null,log:[],t0:Date.now()};
+var ST=['Técnico','Jefe de taller','Cliente','Resultado'];
+var RL=['Técnico','Jefe de taller','Cliente'];
+var PL={alta:'Prioridad alta',media:'Prioridad media',baja:'Prioridad baja'};
+var COMP=['Pastillas de freno','Amortiguador delantero','Correa de distribución','Batería','Llantas'];
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function now(){return new Date().toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'})}
+function add(t){S.log.push({h:now(),t:t})}
+function mediaHtml(){
+ var f=S.f; if(!f||!f.url) return '<div class="media">Sin foto ni video (demo)</div>';
+ if(f.kind==='video') return '<div class="media"><video src="'+f.url+'" controls playsinline></video></div>';
+ return '<div class="media"><img src="'+f.url+'" alt="Evidencia del técnico"></div>';
+}
+function badge(p){return '<span class="badge"><span class="dot d-'+p+'"></span>'+PL[p]+'</span>'}
+function steps(){
+ document.getElementById('steps').innerHTML=ST.map(function(n,i){
+  var c=i<S.stage?'step ok':(i===S.stage?'step on':'step');return '<div class="'+c+'">'+(i+1)+'. '+n+'</div>'}).join('');
+ document.getElementById('tabs').innerHTML=RL.map(function(n,i){
+  return '<button class="tab'+(i===S.role?' sel':'')+'" data-r="'+i+'">'+n+'</button>'}).join('');
+ var tb=document.querySelectorAll('.tab');
+ for(var i=0;i<tb.length;i++){tb[i].onclick=function(){S.role=+this.getAttribute('data-r');render()}}
+}
+function tecnico(){
+ if(S.stage>0) return '<div class="card"><h2>Hallazgo enviado</h2><div class="kv"><b>'+esc(S.f.comp)+'</b><br>'+esc(S.f.obs)+'<br>Tiempo estimado: <b>'+esc(S.f.time)+'</b></div>'+mediaHtml()+'</div>';
+ return '<div class="card"><h2>Registrar hallazgo</h2><div class="kv">Durante el mantenimiento encontraste algo que requiere un trabajo adicional.</div>'+
+ '<label for="comp">Componente</label><select id="comp">'+COMP.map(function(c){return '<option>'+c+'</option>'}).join('')+'</select>'+
+ '<label for="obs">¿Qué encontraste?</label><textarea id="obs" placeholder="Ej: desgaste visible, espesor por debajo del mínimo"></textarea>'+
+ '<label for="time">Tiempo estimado del trabajo</label><select id="time"><option>30 min</option><option>1 h</option><option>1 h 30 min</option><option>2 h</option></select>'+
+ '<label for="file">Foto o video de evidencia</label><input type="file" id="file" accept="image/*,video/*">'+
+ '<div class="row"><button class="btn ghost" id="ex">Cargar ejemplo</button><button class="btn acc" id="send1">Enviar al jefe de taller</button></div></div>';
+}
+function jefe(){
+ if(S.stage===0) return '<div class="card empty">Aún no hay hallazgos para revisar. Primero registra uno como técnico.</div>';
+ var head='<div class="card"><h2>Revisión del jefe de taller</h2><div class="kv"><b>'+esc(S.f.comp)+'</b><br>'+esc(S.f.obs)+'<br>Tiempo estimado: <b>'+esc(S.f.time)+'</b></div>'+mediaHtml();
+ if(S.stage>1) return head+'<div style="margin-top:8px">'+badge(S.f.prio)+'</div><div class="kv" style="margin-top:8px">Recomendación: '+esc(S.f.rec)+'</div></div>';
+ return head+'<label>Clasifica el trabajo</label><div class="prio">'+
+ [['alta','Alta: este servicio'],['media','Media: próximo servicio'],['baja','Baja: a futuro']].map(function(p,i){
+  return '<label><input type="radio" name="prio" value="'+p[0]+'"'+(i===0?' checked':'')+'><span class="dot d-'+p[0]+'"></span>'+p[1]+'</label>'}).join('')+'</div>'+
+ '<label for="rec">Recomendación para el cliente</label><textarea id="rec" placeholder="Explica en simple por qué se recomienda"></textarea>'+
+ '<div class="row"><button class="btn acc" id="send2">Enviar al cliente</button></div></div>';
+}
+function cliente(){
+ if(S.stage<2) return '<div class="card empty">El cliente aún no recibe nada. El jefe de taller debe revisar y enviar el hallazgo.</div>';
+ var h='<div class="phone"><div class="kv" style="margin-bottom:6px">Estado de tu vehículo</div><div style="font-weight:800;margin-bottom:8px">'+(S.stage===2?'En mantenimiento · esperando tu decisión':'Servicio en curso')+'</div>'+
+ '<div class="card" style="padding:14px;margin:0"><b>'+esc(S.f.comp)+'</b>'+mediaHtml()+'<div>'+badge(S.f.prio)+'</div>'+
+ '<p class="kv" style="margin:10px 0 4px"><b>Explicación:</b> '+esc(S.f.obs)+'</p><p class="kv" style="margin:0 0 4px"><b>Recomendación del taller:</b> '+esc(S.f.rec)+'</p><p class="kv" style="margin:0"><b>Tiempo estimado:</b> '+esc(S.f.time)+'</p></div>';
+ if(S.stage===2) h+='<div class="row"><button class="btn acc" data-d="aprobado">Aprobar</button><button class="btn" data-d="programado">Programar</button><button class="btn ghost" data-d="rechazado">Rechazar</button></div>';
+ else h+=resHtml();
+ return h+'</div>';
+}
+function resHtml(){
+ var m={aprobado:['ap','Aprobaste este trabajo. Tu autorización quedó registrada.'],programado:['pr','Lo programaste para un próximo servicio.'],rechazado:['re','Decidiste no realizarlo. Queda registrado.']}[S.decision];
+ return '<div class="res '+m[0]+'">'+m[1]+'</div>';
+}
+function render(){
+ steps();
+ var p=document.getElementById('panel');
+ p.innerHTML=[tecnico,jefe,cliente][S.role]();
+ var lg=document.getElementById('log');
+ lg.innerHTML=S.log.length?S.log.map(function(l){return '<li><time>'+l.h+'</time><span>'+esc(l.t)+'</span></li>'}).join(''):'<li style="color:var(--mute)">Todavía no hay actividad.</li>';
+ bind();
+}
+function bind(){
+ var ex=document.getElementById('ex');
+ if(ex) ex.onclick=function(){
+  document.getElementById('comp').value='Pastillas de freno';
+  document.getElementById('obs').value='Las pastillas delanteras están desgastadas por debajo del espesor mínimo y el disco muestra rayaduras.';
+  document.getElementById('time').value='1 h 30 min'};
+ var s1=document.getElementById('send1');
+ if(s1) s1.onclick=function(){
+  var obs=document.getElementById('obs').value.trim();
+  if(!obs){document.getElementById('obs').focus();return}
+  var fi=document.getElementById('file').files[0];
+  S.f={comp:document.getElementById('comp').value,obs:obs,time:document.getElementById('time').value,url:null,kind:null};
+  if(fi){S.f.url=URL.createObjectURL(fi);S.f.kind=fi.type.indexOf('video')===0?'video':'image'}
+  S.stage=1;S.role=1;add('Técnico registró hallazgo: '+S.f.comp+(fi?' (con evidencia)':''));render()};
+ var s2=document.getElementById('send2');
+ if(s2) s2.onclick=function(){
+  S.f.prio=document.querySelector('input[name=prio]:checked').value;
+  S.f.rec=document.getElementById('rec').value.trim()||'Se recomienda realizar este trabajo según la prioridad indicada.';
+  S.stage=2;S.role=2;add('Jefe de taller clasificó como '+PL[S.f.prio].toLowerCase()+' y envió al cliente');render()};
+ var ds=document.querySelectorAll('[data-d]');
+ for(var i=0;i<ds.length;i++){ds[i].onclick=function(){
+  S.decision=this.getAttribute('data-d');S.stage=3;add('Cliente '+S.decision+' el trabajo');render()}}
+}
+document.getElementById('reset').onclick=function(){
+ S={stage:0,role:0,f:null,decision:null,log:[],t0:Date.now()};render()};
+render();
+</script>
+</body>
+</html>
